@@ -3,9 +3,9 @@ components:
     init_parameters:
       batch_size: 32
       device:
-        device: cpu
+        device: mps
         type: single
-      model: google-bert/bert-base-uncased
+      model: mixedbread-ai/mxbai-embed-large-v1
       normalize_embeddings: false
       prefix: ''
       progress_bar: true
@@ -18,22 +18,23 @@ components:
     type: haystack.components.embedders.sentence_transformers_text_embedder.SentenceTransformersTextEmbedder
   llm:
     init_parameters:
-      api_base_url: null
-      api_key:
-        env_vars:
-          - OPENAI_API_KEY
-        strict: true
-        type: env_var
-      generation_kwargs: { }
-      model: gpt-3.5-turbo
+      generation_kwargs:
+        max_new_tokens: 512
+        stop_sequences: []
+      model: mistralai/Mistral-7B-Instruct-v0.2
       streaming_callback: null
-      system_prompt: null
-    type: haystack.components.generators.openai.OpenAIGenerator
+      token:
+        env_vars:
+        - HF_API_TOKEN
+        strict: false
+        type: env_var
+      url: null
+    type: haystack.components.generators.hugging_face_tgi.HuggingFaceTGIGenerator
   prompt_builder:
     init_parameters:
-      template: "\nGiven these documents, answer the question.\nDocuments:\n{% for\
-        \ doc in documents %}\n    {{ doc.content }}\n{% endfor %}\nQuestion: {{question}}\n\
-        Answer:\n"
+      template: "\nAnswer the questions based on the given context.\n\nContext:\n\
+        {% for document in documents %}\n    {{ document.content }}\n{% endfor %}\n\
+        \nQuestion: {{ question }}\nAnswer:\n"
     type: haystack.components.builders.prompt_builder.PromptBuilder
   retriever:
     init_parameters:
@@ -55,4 +56,4 @@ connections:
 - receiver: llm.prompt
   sender: prompt_builder.prompt
 max_loops_allowed: 100
-data: {}
+metadata: {}
