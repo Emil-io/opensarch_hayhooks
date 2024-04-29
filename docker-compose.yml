@@ -1,0 +1,23 @@
+services:
+  opensearch:
+    image:  opensearchproject/opensearch:latest
+    restart: always
+    container_name: opensearch
+    ports:
+      - 9200:9200
+      - 9600:9600
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - DISABLE_INSTALL_DEMO_CONFIG=true # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
+      - DISABLE_SECURITY_PLUGIN=true
+    volumes:
+      - ./opensearch_data:/opensearch_data
+
+  hayhooks:
+    build: .
+    container_name: hayhooks
+    ports:
+      - "1416:1416"
+    volumes:
+      - ./pipelines:/pipelines
