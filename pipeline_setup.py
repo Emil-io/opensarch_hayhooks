@@ -63,7 +63,7 @@ preprocessing_pipeline.connect("document_embedder", "document_writer")
 
 
 
-preprocessing_pipeline.run({"file_type_router": {"sources": list(Path("/Users/emildeepset/Desktop/DatenSaetze/TestDaten").glob("**/*"))}})
+#preprocessing_pipeline.run({"file_type_router": {"sources": list(Path("/Users/emildeepset/Desktop/DatenSaetze/TestDaten").glob("**/*"))}})
 
 template = """
 Answer the questions based on the given context.
@@ -77,7 +77,7 @@ Question: {{ question }}
 Answer:
 """
 pipe = Pipeline()
-pipe.add_component("embedder", HuggingFaceTEIDocumentEmbedder(model="mixedbread-ai/mxbai-embed-large-v1", url=))
+pipe.add_component("embedder", SentenceTransformersTextEmbedder(model="mixedbread-ai/mxbai-embed-large-v1"))
 pipe.add_component("retriever", OpenSearchEmbeddingRetriever(document_store=document_store))
 pipe.add_component("prompt_builder", PromptBuilder(template=template))
 pipe.add_component("llm", HuggingFaceTGIGenerator("mistralai/Mistral-7B-Instruct-v0.2"))

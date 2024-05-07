@@ -3,7 +3,7 @@ components:
     init_parameters:
       batch_size: 32
       device:
-        device: cpu
+        device: mps
         type: single
       model: mixedbread-ai/mxbai-embed-large-v1
       normalize_embeddings: false
@@ -21,7 +21,7 @@ components:
       generation_kwargs:
         max_new_tokens: 512
         stop_sequences: []
-      model: mistralai/Mistral-7B-Instruct-v0.1
+      model: mistralai/Mistral-7B-Instruct-v0.2
       streaming_callback: null
       token:
         env_vars:
